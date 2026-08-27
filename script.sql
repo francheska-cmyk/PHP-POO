@@ -25,5 +25,3 @@ INSERT INTO `user`(pseudo, email, `password`, role_id)
 INSERT INTO `user`(pseudo, email, `password`)
 	VALUES ('yoann', 'yoann@gmail.fr', '$2y$12$fTUdpZ2zZO7udEneY5PbM.NF7xWSAqxyeuPUqtG7BnIET120SjxI2');
     
-SELECT * FROM `user`
-	JOIN `role` ON `role`.id = `user`.role_id;
