@@ -57,13 +57,26 @@ switch ($path) {
     case $_ENV['utilisateurs']:
         // utilisation de l'alias pour le Controller\ControllerUser
         $controller = new MonUser(new ModelUser(Utils::connect()), new ViewUser());
+        //formulaire de connexion
+        $controller ->seConnecter();
+        //rendu de l'affichage 
         $controller->render();
         break;
     case $_ENV['articles'] :
         $controller = new ControllerArticle(new ModelArticle(Utils::connect()), new ViewArticle());
         $controller->render();
         break;
+
+    // route pour tester au fur et à mesure ce qui est fait 
+    case $_ENV['test']:
+        //TEST DE findByEmail() du modelUser
+        //1 créer un objet modelUser
+        $model = new ModelUser(Utils::connect());
+        $data = $model->setEmail('yoann@gmail.fr')->findByEmail();
+        var_dump($data);
+        break; 
     default:
         echo "erreur 404";
         break;
 }
+

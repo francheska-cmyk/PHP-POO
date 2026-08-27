@@ -8,6 +8,7 @@ class ViewUser{
     private ViewFooter $viewFooter;
     private ViewHeader $viewHeader;
     private ?string $buffer;
+    private ?string $message = '';
 
     //CONSTRUCTEUR
 
@@ -16,6 +17,14 @@ class ViewUser{
         $this->dataUsers = $newData;
         $this->viewFooter = new ViewFooter();
         $this->viewHeader = new ViewHeader("Utilisateurs","./public/src/script/scriptUser.js");
+    }
+
+    public function getMessage() {
+    return this->message; 
+    }
+    public function setMessage($newMessage) :self{
+        $this->message =$newMessage; 
+        return $this;
     }
 
     //METHODS
@@ -40,6 +49,24 @@ class ViewUser{
                 }
 ?>
                 </ul>
+
+                <h2>Formulaire de connexion</h2>
+                    <form action="" method="post">
+                        <div>
+                            <label for="pseudo">Pseudo:</label>
+                            <input type="text" id="pseudo" name="pseudo" >
+                        </div>
+                        <div>
+                            <label for="email">E-mail :</label>
+                            <input type="text" id="email" name="email" >
+                        </div>
+                        <div>
+                            <label for="password">Mot de passe :</label>
+                            <input type="password" id="password" name="password" >
+                        <button type="submit" name="submit" value="Envoyer">Envoyer</button>
+                    </form>
+                    <p><?php echo $this->message ?></p>
+
             </main>
 <?php
         //Récupération du buffer dans la propriété $this->buffer

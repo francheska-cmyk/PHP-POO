@@ -12,12 +12,13 @@ namespace Controller;
 
 use Model\ModelUser;
 use View\ViewUser;
-
+use Utils\Utils; 
 class ControllerUser{
     //ATTRIBUTS
     private ModelUser $modelUser;
     private ?ViewUser $viewUser;
     private ?string $titre;
+  
 
     //CONSTRUCTEUR
     public function __construct(ModelUser $model, ViewUser $view){
@@ -86,5 +87,55 @@ class ControllerUser{
         //Appel de la view pour effectuer l'affichage
         $title = "Mes Utilisateurs";
         $this->viewUser->displayAll();
+    }
+
+    public function seConnecter() :void{
+        //verifier si le formulaire est soumis
+        if (isset ($_POST["submit"])) {
+            //test si les 3 champs sont remplis
+            if (
+                !empty($_POST["pseudo"]) &&
+                !empty($_POST["email"]) &&
+                !empty($_POST["password"]))
+            {
+        //verifier le format des données
+                if (filter_var($_POST["email"], FILTER_VALIDATE_EMAIL))
+                    {
+                 //nettoyer les données
+                    $email = Utils::sanitize($_POST["email"]); 
+                    $pseudo = Utils::sanitize($_POST["pseudo"]);
+                    $password= Utils::sanitize($_POST["password"]);
+                    // $_POST = sanitize_array($_POST);
+                    //appel de ModelUser pour récuperer email avec la  la méthode findByEmail
+                    $user = $this -> getModel()->setEmail($email)->findByEmail(); 
+                    // $user = $this->ModelUser->findByEmail($_POST["email"]);
+                    //verifier si l'email existe
+                    if(!empty($user)){
+                    //verifier le mot de passe 
+                        if(password_verify($password, $user["password"])){
+                            //connexion de l'utilisateur avec super globale $_SESSION
+                            //Attention il faut démarrer la session dans index qui est notre routeur pour accéder à la SESSION
+                            // $_SESSION["status"]=true; 
+                            $_SESSION["email"] =$user["email"]; 
+                            $_SESSION["pseudo"] =$user["pseudo"]; 
+                            $_SESSION["role"] =$user["role"]; 
+                            $_SESSION["created_at"] =$user["created_at"]; 
+                            $_SESSION["id"] =$user["id"]; 
+                            $this->getviewUser()->setMessage("Connexion réussie"); 
+                            } else {
+                                $this->getviewUser()->setMessage('Les informations de connexion sont incorrectes'); 
+                            }
+                        } else {
+                            $this->getviewUser()->setMessage("Les informations de connexion sont incorrectes"); 
+                        }
+                    } else {
+                        $this->getviewUser()->setMessage("L'email est invalide");
+                    }
+                    }else{
+                        $this->getviewUser()->setMessage("Veuillez remplir tous les champs");
+            }
+        }
+        // include './view/viewUser.php';
+
     }
 }
