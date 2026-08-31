@@ -49,10 +49,18 @@ switch ($path) {
         //Rendu de l'affichage
         $controller->render();
         break;
+
     case $_ENV['articles'] :
         $controller = new ControllerArticle(new ModelArticle(Utils::connect()), new ViewArticle("Articles","./public/src/script/scriptArticle.js"));
         $controller->render();
         break;
+    
+    
+    case $_ENV['moncompte'] :
+        //Affichage de la page mon compte
+        $controller = new ControllerAccount(new ModelUser(Utils::connect()), new ViewAccount("Mon Compte",""));
+        $controller->render();
+        break;    
 
     case $_ENV['deconnexion'] :
         //Destruction de la sessions
