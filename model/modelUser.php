@@ -20,16 +20,16 @@ class ModelUser extends Model{
 
     //GETTER ET SETTER
 
-    //utile pour faire les tests progessifs
-    public function getEmail() {
-    return this->email; 
-    }
+    //utile pour faire les tests progessifs (les deux fonctions sont décalés dans la branche CRUD )
+    // public function getEmail() {
+    // return this->email; 
+    // }
 
         
-    public function setEmail($newEmail):self{
-        $this->email = $newEmail;
-        return $this;
-    }
+    // public function setEmail($newEmail):self{
+    //     $this->email = $newEmail;
+    //     return $this;
+    // }
 
 
 
@@ -50,22 +50,23 @@ class ModelUser extends Model{
         }
     }
 
-    public function findByEmail():?array{
-        try {
-        //1. préparer la requête 
-        $req =$this->getBDD()->prepare('SELECT u.id, u.pseudo, u.password, u.created_at, r.role FROM user u INNER JOIN role r ON r.id = u.role_id WHERE u.email = ?');
+    // fonction décalé dans la Branche CRUD 
+    // public function findByEmail():?array{
+    //     try {
+    //     //1. préparer la requête 
+    //     $req =$this->getBDD()->prepare('SELECT u.id, u.pseudo, u.password, u.created_at, r.role FROM user u INNER JOIN role r ON r.id = u.role_id WHERE u.email = ?');
 
-        //assignation du paramètre.Binding Param : relié les ? de la requête à la valeur d'une donnée
-        $req -> bindParam(1, $this->email, PDO::PARAM_STR); 
+    //     //assignation du paramètre.Binding Param : relié les ? de la requête à la valeur d'une donnée
+    //     $req -> bindParam(1, $this->email, PDO::PARAM_STR); 
 
-        //execute la requête
-        $req ->execute();
+    //     //execute la requête
+    //     $req ->execute();
 
-        //retourner les donnees
-        return $req->fetch(PDO::FETCH_ASSOC);
-        }catch(EXCEPTION $error){
-            die($error->getMessage());
-        }
+    //     //retourner les donnees
+    //     return $req->fetch(PDO::FETCH_ASSOC);
+    //     }catch(EXCEPTION $error){
+    //         die($error->getMessage());
+    //     }
 
-    }
+    // }
 }
