@@ -26,4 +26,3 @@ class ViewFooter{
         echo $this->buffer; //affichage du contenu en mémoire tampon
     }
 }
-
