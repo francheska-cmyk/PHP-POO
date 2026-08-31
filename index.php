@@ -1,18 +1,5 @@
 <?php
 //ROUTEUR
-//Autoloader Manuel (sans Composer)
-//ATTENTION : les espaces de noms de vos class doivent respecter la nomeclature des dossiers et des fichiers.
-// spl_autoload_register(function (string $fqcn): void {
-//     // "Controller\ControllerUser" -> "D:\...\MVC\Controller\ControllerUser.php"
-//     $chemin = __DIR__ . DIRECTORY_SEPARATOR
-//             . str_replace('\\', DIRECTORY_SEPARATOR, $fqcn)
-//             . '.php';
-
-//     if (is_file($chemin)) {
-//         require_once $chemin;
-//     }
-// });
-
 //Autoloader de Composer
 //AVANTAGE : les namespaces n'ont plus besoin de se conformer à l'arborescence
 //De plus, il est possible de faire un auto-include des fichiers ne comportant pas de class (voir composer.json)
@@ -56,27 +43,14 @@ switch ($path) {
     case '/':
     case $_ENV['utilisateurs']:
         // utilisation de l'alias pour le Controller\ControllerUser
-        $controller = new MonUser(new ModelUser(Utils::connect()), new ViewUser());
-        //formulaire de connexion
-        $controller ->seConnecter();
-        //rendu de l'affichage 
+        $controller = new MonUser(new ModelUser(Utils::connect()), new ViewUser("Utilisateurs","./public/src/script/scriptUser.js"));
         $controller->render();
         break;
     case $_ENV['articles'] :
-        $controller = new ControllerArticle(new ModelArticle(Utils::connect()), new ViewArticle());
+        $controller = new ControllerArticle(new ModelArticle(Utils::connect()), new ViewArticle("Articles","./public/src/script/scriptArticle.js"));
         $controller->render();
         break;
-
-    // route pour tester au fur et à mesure ce qui est fait 
-    case $_ENV['test']:
-        //TEST DE findByEmail() du modelUser
-        //1 créer un objet modelUser
-        $model = new ModelUser(Utils::connect());
-        $data = $model->setEmail('yoann@gmail.fr')->findByEmail();
-        var_dump($data);
-        break; 
     default:
         echo "erreur 404";
         break;
 }
-
