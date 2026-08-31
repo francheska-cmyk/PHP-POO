@@ -35,6 +35,15 @@ class ViewHeader{
                     <nav>
                         <a href=<?php echo $_ENV['utilisateurs'] ?> >Utilisateurs</a>
                         <a href=<?php echo $_ENV['articles'] ?> >Articles</a>
+                        <?php 
+                            //TEST la $_SESSION pour savoir si je dois afficher le lien vers Mon Compte et Se Déconnecter
+                            if(isset($_SESSION) && !empty($_SESSION)){
+                        ?>
+                                <a href=<?php echo $_ENV['moncompte'] ?> >Mon Compte</a>
+                                <a href=<?php echo $_ENV['deconnexion'] ?> >Se Déconnecter</a>
+                        <?php
+                            }
+                        ?>
                     </nav>
                 </header>
 <?php
