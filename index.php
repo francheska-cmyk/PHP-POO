@@ -1,5 +1,11 @@
 <?php
 //ROUTEUR
+
+// Démarrage de la session 
+
+session_start();
+
+
 //Autoloader de Composer
 //AVANTAGE : les namespaces n'ont plus besoin de se conformer à l'arborescence
 //De plus, il est possible de faire un auto-include des fichiers ne comportant pas de class (voir composer.json)
@@ -26,10 +32,12 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use Controller\ControllerUser as MonUser; // avec AS je fourni un alias au nom de ma classe
 use Controller\ControllerArticle;
+use Controller\ControllerAccount; 
 use Model\ModelUser;
 use Model\ModelArticle;
 use View\ViewUser;
 use View\ViewArticle;
+use View\ViewAccount; 
 use Utils\Utils;
 
 //1. Récupérer l'url demandé par l'utilisateur
@@ -53,7 +61,7 @@ switch ($path) {
         break;
 
     case $_ENV['articles'] :
-        $controller = new ControllerArticle(new ModelArticle(Utils::connect()), new ViewArticle("Articles","./public/src/script/scriptArticle.js"));
+        $controller = new ControllerArticle(new Model\Model(Utils::connect()), new ViewArticle("Articles","./public/src/script/scriptArticle.js"));
         $controller->render();
         break;
     
@@ -79,23 +87,13 @@ switch ($path) {
         //2. Donner un l'objet un email
         //3. Lui demander de lancer findByEmail()
         //4. Afficher le résultat
-        // $model = new ModelUSer(Utils::connect());
-        // $data = $model->setEmail('yoannnn@gmail.fr')->findByEmail();
-        // var_dump($data);
+        $model = new ModelUSer(Utils::connect());
+        $data = $model->setEmail('yoannnn@gmail.fr')->findByEmail();
+        var_dump($data);
 
         //test de finbyPseudo () du ModelUser (même logique que findbyEmail)
-        // $model = new ModelUSer(Utils::connect());
-        // $data = $model ->setPseudo('yoann')->findByPseudo(); 
-        // var_dump($data);
-
-
-        //test de addUser du ModelUser 
         $model = new ModelUSer(Utils::connect());
-        $pseudo = $model->addUser('francheska');
-        $data = $model ->setEmail('francheska@gmail.com')->addUser();
-        $data = $model->setPassword('5678')->addUser();
-        // $data = $model ->setRole('Client')->addUser();
-        $data = $modelUser ->setCreatedAt('2026-08-31')->addUser();
+        $data = $model ->setPseudo('yoann')->findByPseudo(); 
         var_dump($data);
 
         break;

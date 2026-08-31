@@ -1,6 +1,6 @@
 <?php
 namespace Controller;
-use Model\Model;
+use Model\Model; 
 use View\View;
 
 //Class Controller regrouper le code commun à tous les Controller
@@ -42,4 +42,5 @@ class Controller{
         //2.Passage des data à la View et son Appel pour afficher les data traitées
         $this->view->setData($data)->displayAll();
     }
+
 }

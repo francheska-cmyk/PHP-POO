@@ -125,6 +125,13 @@ class ControllerUser extends Controller{
             $this->getView()->setMessage("Vous avez bien été enregistré.");
         }
     }
+
+    //polymorphisme de la méthode render 
+    public function render():void{
+        // Vérifier si l'utilisateur est connecté pour ne pas afficher les formulaires
+        
+    }
+
 }
 
 

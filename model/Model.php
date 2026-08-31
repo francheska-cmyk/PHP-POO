@@ -30,4 +30,9 @@ class Model {
         $this->bdd = $bdd;
         return $this;
     }
+
+         //METHODS
+    public function findAll():?array{
+        return null; // sera redéfinie dans les classes filles
+    }
 }

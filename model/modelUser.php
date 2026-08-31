@@ -4,6 +4,7 @@ namespace Model;
 
 use Model\Model;
 use PDO;
+use Exception;
 
 //extends : la propriété pour l'héritage. Ici ModelUser hérite de la class Model
 class ModelUser extends Model{
