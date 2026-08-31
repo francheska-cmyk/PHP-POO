@@ -46,6 +46,8 @@ switch ($path) {
         $controller = new MonUser(new ModelUser(Utils::connect()), new ViewUser("Utilisateurs","./public/src/script/scriptUser.js"));
           //Formulaire de connexion
         $controller->seConnecter();
+        // formulaire d'inscription 
+        $controller->registerUser();
         //Rendu de l'affichage
         $controller->render();
         break;
@@ -77,12 +79,27 @@ switch ($path) {
         //2. Donner un l'objet un email
         //3. Lui demander de lancer findByEmail()
         //4. Afficher le résultat
+        // $model = new ModelUSer(Utils::connect());
+        // $data = $model->setEmail('yoannnn@gmail.fr')->findByEmail();
+        // var_dump($data);
+
+        //test de finbyPseudo () du ModelUser (même logique que findbyEmail)
+        // $model = new ModelUSer(Utils::connect());
+        // $data = $model ->setPseudo('yoann')->findByPseudo(); 
+        // var_dump($data);
+
+
+        //test de addUser du ModelUser 
         $model = new ModelUSer(Utils::connect());
-        $data = $model->setEmail('yoannnn@gmail.fr')->findByEmail();
+        $pseudo = $model->addUser('francheska');
+        $data = $model ->setEmail('francheska@gmail.com')->addUser();
+        $data = $model->setPassword('5678')->addUser();
+        // $data = $model ->setRole('Client')->addUser();
+        $data = $modelUser ->setCreatedAt('2026-08-31')->addUser();
         var_dump($data);
+
         break;
 
-        break; 
     default:
         echo "erreur 404";
         break;

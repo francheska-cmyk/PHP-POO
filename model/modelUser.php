@@ -24,6 +24,22 @@ class ModelUser extends Model{
         return $this;
     }
 
+    public function setPseudo(string $newPseudo):self{
+        $this ->pseudo= $newPseudo;
+        return $this; 
+    }
+
+    public function setPassword(string $newPassword):self{
+        $this ->password= $newPassword;
+        return $this; 
+    }
+
+    public function setRole(string $newRole):self{
+        $this ->role= $newRole;
+        return $this; 
+    }
+
+
     //METHODS
     public function findAll():?array{
         try{
@@ -61,4 +77,44 @@ class ModelUser extends Model{
             die($error->getMessage());
         }
     }
-}
+
+    public function findByPseudo(): array | bool | null {
+        try {
+            //1. Preparation de la requete 
+            $req = $this->getBDD()->prepare('SELECT u.id, u.pseudo, u.email, u.password, u.created_at, r.role FROM user u INNER JOIN role r ON r.id = u.role_id WHERE u.pseudo = ?'); 
+
+            //2. BindParam pour relier '?' à la valeur donnée par la requête 
+            $req->bindParam(1,$this->pseudo,PDO::PARAM_STR);
+
+            //3. Exécute la requête
+            $req->execute();
+
+            //4. Retourner la réponse de la BDD
+            return $req->fetch(PDO::FETCH_ASSOC);//fetch => [id : 1, pseudo : "root", ...] : directement le tableau associatif
+            //fetchAll => [ [id : 1, pseudo : "root", ...] ] : le tableau associatif se trouve dans un tableau
+
+        }catch(EXCEPTION $error){
+            die($error->getMessage());
+        }
+        }
+
+    public function addUser() {
+        try {
+            //hachage du mot de passe  (peut se faire ici comme dans le controller)
+            //1. Preparation de la requete
+            $req = $this->getBDD()->prepare('INSERT INTO user 
+            (pseudo, email, password)
+            VALUES (?, ?, ?)'); 
+            //2. Assigner les paramètres avec bindParam
+            $req->bindParam(1,$this->pseudo,PDO::PARAM_STR);
+            $req->bindParam(2,$this->email,PDO::PARAM_STR);
+            $req->bindParam(3,$this->password,PDO::PARAM_STR);
+           
+            //3. Exécute la requete
+            $req->execute(); 
+
+        }catch(EXCEPTION $error){
+            die($error->getMessage());
+        }
+    }
+    }

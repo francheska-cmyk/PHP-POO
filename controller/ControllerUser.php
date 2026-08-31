@@ -69,6 +69,62 @@ class ControllerUser extends Controller{
 
             //6. Afficher le message de confirmation
             $this->getView()->setMessage('Vous êtes bien connecté. Youpie !');
+
         }            
     }
+
+    public function registerUser():void{
+        //Vérifier si je reçoit le formulaire d'inscription
+        if(isset($_POST['submitInscription'])){
+            //Vérifier les champs vides
+            if(empty($_POST['pseudoInscription']) || empty($_POST['emailInscription']) || empty($_POST['passwordInscription']) || empty($_POST['passwordVerify'])){
+                $this->getView()->setMessage('Veuillez remplir tous les champs.');
+                return;
+            }
+
+            //Vérifier le format de l'email
+            if(!filter_var($_POST['emailInscription'], FILTER_VALIDATE_EMAIL)){
+                $this->getView()->setMessage("L'Email n'est pas au bon format.");
+                return;
+            }
+
+            //Vérifier la concordance des mots de passe
+            if($_POST['passwordInscription'] !== $_POST['passwordVerify']){
+                $this->getView()->setMessage("Vos mots de passe ne correspondent pas.");
+                return;
+            }
+
+            //Nettoyer les données
+            $pseudo = Utils::sanitize($_POST['pseudoInscription']);
+            $email = Utils::sanitize($_POST['emailInscription']);
+            $password = Utils::sanitize($_POST['passwordInscription']);
+
+            //Hasher le mot de passe
+            $password = password_hash($password, PASSWORD_DEFAULT);
+
+            //Je vais fournir au modèle ces données
+            $this->getModel()->setPseudo($pseudo)->setEmail($email)->setPassword($password);
+
+            //Vérifier si le pseudo est libre
+            $data = $this->getModel()->findByPseudo();
+            if($data){
+                $this->getView()->setMessage("Ce pseudo n'est pas disponible.");
+                return;
+            }
+
+            //Vérifier si l'email est libre
+            $data = $this->getModel()->findByEmail();
+            if($data){
+                $this->getView()->setMessage("Cet email est déjà pris.");
+                return;
+            }
+
+            //Lancement de l'insertion en BDD
+            $this->getModel()->addUser();
+
+            $this->getView()->setMessage("Vous avez bien été enregistré.");
+        }
+    }
 }
+
+

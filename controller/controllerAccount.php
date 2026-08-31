@@ -16,6 +16,7 @@ class ControllerAccount extends Controller {
     public function render():void{
         //1. Tester la Session pour savoir si l'utilisateur a le droit d'accéder à cette page
         if(!isset($_SESSION) || empty($_SESSION)){
+            //
             header('location:'.$_ENV['utilisateurs']);
             exit;
         }
