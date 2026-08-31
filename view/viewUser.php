@@ -4,11 +4,16 @@ namespace View;
 use View\View;
 
 class ViewUser extends View{
+        private string $message = '';
     //ATTRIBUT
 
     //CONSTRUCTEUR
 
     //GETTER ET SETTER
+    public function setMessage(string $newMessage):self{
+        $this->message = $newMessage;
+        return $this;
+    }
     
     //METHODS
     //Mise en mémoire tampon
@@ -21,7 +26,14 @@ class ViewUser extends View{
         ob_start();
 ?>
             <main>
-                <h1>Liste des utilisateurs</h1>
+                <h2>Connexion</h2>
+                    <form action="" method="post">
+                        <label for="email">Votre Email<input type="text" id="email" name="email"></label>
+                        <label for="password">Votre Mot de Passe<input type="password" id="password" name="password"></label>
+                        <input type="submit" name="submitConnexion" value="Se Connecter">
+                    </form>
+                    <p><?php echo $this->message ?></p>
+                <h2>Liste des utilisateurs</h2>
                 <ul>
 <?php  
                 // inclusion de la boucle foreach effectuer en 1. (plus haut) au sein du template HTML mis en buffer

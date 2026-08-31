@@ -17,21 +17,21 @@ class Utils{
         return ['message' => password_hash($password), 'code' => 'correct'];
     }
 
-    //fontion sanitize deplacé dans la branche CRUD
-//     public static function sanitize(string $str): string {
-//     return 
-//         htmlspecialchars(
-//             strip_tags(
-//                 trim($str)
-//             ), ENT_COMPAT
-//         );
-// }
 
-//     public static function sanitize_array(){
-//         foreach ($tab as $key => $value) {
-//         if (gettype($value) != 'array' || $key != 'submit') {
-//             $tab[$key] = sanitize($value);
-//     }
-//         }
-// }
+    public static function sanitize(string $str): string {
+        return 
+        htmlspecialchars(
+            strip_tags(
+                trim($str)
+            ), ENT_COMPAT
+        );
+}
+
+    public static function sanitize_array(){
+        foreach ($tab as $key => $value) {
+        if (gettype($value) != 'array' || $key != 'submit') {
+            $tab[$key] = sanitize($value);
+    }
+        }
+}
 }

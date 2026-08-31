@@ -11,7 +11,7 @@ class ViewFooter{
         ob_start(); //Mise en mémoire tampon (buffer)
 ?>
             <footer>
-               <p> <?php echo "Salut le Monde !" ?> </p>
+            <p> <?php echo "Salut le Monde !" ?> </p>
             </footer>
         </body>
         </html>

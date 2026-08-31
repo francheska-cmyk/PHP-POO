@@ -8,139 +8,67 @@ namespace Controller;
 - La première lettre de chaque lettre d'un namespace commence par une Majuscule
 => le nom du dossier doit commencer par une Majuscule
 - Le nom du fichier doit être identique au nom de la class, majuscule comprise
-*/use controller\controller; 
+*/
 
-use Model\ModelUser;
-use View\ViewUser;
-use Utils\Utils; 
-class ControllerUser extends Controller {
-    // TOUT DISPARAIT CAR HERITAGE DE CONTROLLER
-//     //ATTRIBUTS
-//     private ModelUser $modelUser;
-//     private ?ViewUser $viewUser;
-//     private ?string $titre;
-  
+use Controller\Controller;
+use Utils\Utils;
 
-//     //CONSTRUCTEUR
-//     public function __construct(ModelUser $model, ViewUser $view){
-//         $this->modelUser = $model;
-//         $this->viewUser = $view;
-//     }
+class ControllerUser extends Controller{
+    //ATTRIBUTS
 
-//     //GETTER ET SETTER
-//     public function setTitre($newTitre):self{
-//         $this->titre = newTitre;
-//         return $this;
-//     }
-//     public function getTitre(){
-//         return $this->titre;
-//     }
-//     /**
-//      * Get the value of modelUser
-//      *
-//      * @return ModelUser
-//      */
-//     public function getModelUser(): ModelUser {
-//         return $this->modelUser;
-//     }
+    //CONSTRUCTEUR
+    
 
-//     /**
-//      * Set the value of modelUser
-//      *
-//      * @param ModelUser $modelUser
-//      *
-//      * @return self
-//      */
-//     public function setModelUser(ModelUser $modelUser): self {
-//         $this->modelUser = $modelUser;
-//         return $this;
-//     }
+    //GETTER ET SETTER
+    
 
-//     /**
-//      * Get the value of viewUser
-//      *
-//      * @return ?ViewUser
-//      */
-//     public function getViewUser(): ?ViewUser {
-//         return $this->viewUser;
-//     }
+    //METHODS
+    public function seConnecter():void{
+        //1. Vérifier que l'on reçoive le formulaire de connexion
+        if(isset($_POST['submitConnexion'])){
+            
+            //2. Vérifier les champs : champs vide, format des données, nettoyage
+            if(empty($_POST['email']) || empty($_POST['password'])){
+                $this->getView()->setMessage('Veuillez remplir tous les champs');
+                return;
+            }
+                
+            //Vérification du format d'email
+            if(!filter_var($_POST['email'],FILTER_VALIDATE_EMAIL)){
+                $this->getView()->setMessage('Email pas au bon format');
+                return;
+            }
 
-//     /**
-//      * Set the value of viewUser
-//      *
-//      * @param ?ViewUser $viewUser
-//      *
-//      * @return self
-//      */
-//     public function setViewUser(?ViewUser $viewUser): self {
-//         $this->viewUser = $viewUser;
-//         return $this;
-//     }
+            //Nettoyer mes datas
+            $email = Utils::sanitize($_POST['email']);
+            $password = Utils::sanitize($_POST['password']);
 
-//     //METHODS
-//     public function render(){
-//         //Appel du model pour récupération des données
-//         $data = $this->modelUser->findAll();
+            //3. Demander au model d'aller trouver le compte utilisateur
+            //a. Donner l'email au Model, puis le Model lance findByEmail
+            $data = $this->getModel()->setEmail($email)->findByEmail();
 
-//         //2. Fournir les datas à la viewUser
-//         $this->viewUser->setDataUsers($data);
+            //b. Vérifier la réponse : si je reçois un tableau de donnée utilisateur, ou un false
+            if(!$data){
+                $this->getView()->setMessage('Email et/ou Mot de Passe incorrect');
+                return;
+            }
 
-//         //Appel de la view pour effectuer l'affichage
-//         $title = "Mes Utilisateurs";
-//         $this->viewUser->displayAll();
-//     }
-// 
+            //4. Vérifier les mots de passe
+            if(!password_verify($password, $data['password'])){
+                //si l'email ne correspond à aucun compte
+                $this->getView()->setMessage('Email et/ou Mot de Passe incorrect');
+                return;
+            }
+                            
+            //5. Connecter l'utilisateur
+            $_SESSION['id'] = $data['id'];
+            $_SESSION['pseudo'] = $data['pseudo'];
+            $_SESSION['email'] = $data['email'];
+            $_SESSION['role'] = $data['role'];
+            $_SESSION['createdAt'] = $data['created_at'];
+
+            //6. Afficher le message de confirmation
+            $this->getView()->setMessage('Vous êtes bien connecté. Youpie !');
+        }            
+    }
 }
-
-    //  fonction decalé sur la branche CRUD
-
-//     public function seConnecter() :void{
-//         //verifier si le formulaire est soumis
-//         if (isset ($_POST["submit"])) {
-//             //test si les 3 champs sont remplis
-//             if (
-//                 !empty($_POST["pseudo"]) &&
-//                 !empty($_POST["email"]) &&
-//                 !empty($_POST["password"]))
-//             {
-//         //verifier le format des données
-//                 if (filter_var($_POST["email"], FILTER_VALIDATE_EMAIL))
-//                     {
-//                  //nettoyer les données
-//                     $email = Utils::sanitize($_POST["email"]); 
-//                     $pseudo = Utils::sanitize($_POST["pseudo"]);
-//                     $password= Utils::sanitize($_POST["password"]);
-//                     // $_POST = sanitize_array($_POST);
-//                     //appel de ModelUser pour récuperer email avec la  la méthode findByEmail
-//                     $user = $this -> getModel()->setEmail($email)->findByEmail(); 
-//                     // $user = $this->ModelUser->findByEmail($_POST["email"]);
-//                     //verifier si l'email existe
-//                     if(!empty($user)){
-//                     //verifier le mot de passe 
-//                         if(password_verify($password, $user["password"])){
-//                             //connexion de l'utilisateur avec super globale $_SESSION
-//                             //Attention il faut démarrer la session dans index qui est notre routeur pour accéder à la SESSION
-//                             // $_SESSION["status"]=true; 
-//                             $_SESSION["email"] =$user["email"]; 
-//                             $_SESSION["pseudo"] =$user["pseudo"]; 
-//                             $_SESSION["role"] =$user["role"]; 
-//                             $_SESSION["created_at"] =$user["created_at"]; 
-//                             $_SESSION["id"] =$user["id"]; 
-//                             $this->getviewUser()->setMessage("Connexion réussie"); 
-//                             } else {
-//                                 $this->getviewUser()->setMessage('Les informations de connexion sont incorrectes'); 
-//                             }
-//                         } else {
-//                             $this->getviewUser()->setMessage("Les informations de connexion sont incorrectes"); 
-//                         }
-//                     } else {
-//                         $this->getviewUser()->setMessage("L'email est invalide");
-//                     }
-//                     }else{
-//                         $this->getviewUser()->setMessage("Veuillez remplir tous les champs");
-//             }
-//         }
-//         // include './view/viewUser.php';
-
-//     }
-// }
