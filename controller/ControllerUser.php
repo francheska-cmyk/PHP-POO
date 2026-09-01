@@ -24,6 +24,7 @@ class ControllerUser extends Controller{
 
     //METHODS
     public function seConnecter():void{
+        echo'se connecter';
         //1. Vérifier que l'on reçoive le formulaire de connexion
         if(isset($_POST['submitConnexion'])){
             
@@ -74,6 +75,7 @@ class ControllerUser extends Controller{
     }
 
     public function registerUser():void{
+        echo 'registrer';
         //Vérifier si je reçoit le formulaire d'inscription
         if(isset($_POST['submitInscription'])){
             //Vérifier les champs vides
@@ -124,12 +126,6 @@ class ControllerUser extends Controller{
 
             $this->getView()->setMessage("Vous avez bien été enregistré.");
         }
-    }
-
-    //polymorphisme de la méthode render 
-    public function render():void{
-        // Vérifier si l'utilisateur est connecté pour ne pas afficher les formulaires
-        
     }
 
 }

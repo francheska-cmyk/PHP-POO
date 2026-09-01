@@ -36,7 +36,7 @@ class Controller{
 
     //METHODS
     public function render():void{
-        //1. Appel du model pour récupérer les données des articles
+    //1. Appel du model pour récupérer les données des articles
         $data = $this->model->findAll();
 
         //2.Passage des data à la View et son Appel pour afficher les data traitées

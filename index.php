@@ -46,6 +46,7 @@ $url = parse_url($_SERVER['REQUEST_URI']);
 //2. Récupérer le path de l'url : ceux qui vient après le nom de domaine
 $path = isset($url['path']) ? $url['path'] : '/';
 
+
 //3. Appeler le Controller lié à la route demandée
 switch ($path) {
     case '/':
